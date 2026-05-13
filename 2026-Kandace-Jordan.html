@@ -62,7 +62,8 @@ header p{
   top:0;
   z-index:10;
 }
-button{
+button,
+.link-button{
   border:0;
   border-radius:28px;
   background:var(--sage);
@@ -71,8 +72,12 @@ button{
   font:700 15px 'Cinzel', Georgia, serif;
   box-shadow:0 5px 12px rgba(0,0,0,.16);
   cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
 }
-button:hover{background:var(--sage-dark)}
+button:hover,
+.link-button:hover{background:var(--sage-dark)}
+.link-button.secondary{background:var(--brown)}
 .chart-wrap{
   width:94%;
   min-height:680px;
@@ -278,121 +283,25 @@ button:hover{background:var(--sage-dark)}
 }
 .tag-guide strong{color:var(--brown)}
 
-.serpentine{
-  width:620px;
-  height:1280px;
-  position:relative;
-  grid-column:span 2;
-  overflow:visible;
-}
-.serpentine .serp-floor-label{
-  position:absolute;
-  left:18px;
-  top:10px;
-  color:var(--brown);
-  font-size:28px;
-  font-weight:700;
-}
-.serpentine .serp-table{
-  position:absolute;
-  width:170px;
-  height:170px;
-  border-radius:50%;
-  background:#fff;
-  border:4px solid #5d6cff;
-  box-shadow:0 4px 14px rgba(0,0,0,.08);
-  z-index:2;
-}
-.serpentine .serp-name{
-  position:absolute;
-  width:116px;
-  min-height:40px;
-  padding:7px 5px;
-  border-radius:12px;
-  background:#fffaf0;
-  color:var(--brown);
-  font-size:18px;
-  font-weight:700;
+.choice-note{
+  width:94%;
+  margin:22px auto 0;
+  padding:18px 22px;
+  background:#fffdf8;
+  border:1px dashed var(--outline);
+  border-radius:18px;
   text-align:center;
-  outline:none;
-  z-index:6;
-}
-.serpentine .seat{
-  min-width:70px;
-  width:70px;
-  height:58px;
-  border:4px solid #5d6cff;
-  border-radius:5px;
-  background:#fff;
-  box-shadow:0 3px 8px rgba(0,0,0,.08);
-  z-index:4;
-  padding:3px;
-}
-.serpentine .seat-name{
-  font-size:10px;
-  line-height:1.05;
-}
-.serpentine .seat-tags{
-  font-size:8px;
-}
-.serpentine .serp-garland{
-  position:absolute;
-  left:145px;
-  top:100px;
-  width:330px;
-  height:1040px;
-  pointer-events:none;
-  z-index:3;
-}
-.serpentine .serp-vine{
-  position:absolute;
-  left:18px;
-  top:0;
-  width:292px;
-  height:1040px;
-}
-.serpentine .serp-vine svg{
-  width:100%;
-  height:100%;
-  overflow:visible;
-}
-.serpentine .serp-dot{
-  position:absolute;
-  width:18px;
-  height:18px;
-  border-radius:50%;
-  background:#8b1e1e;
-  z-index:4;
-}
-.serpentine .serp-triangle{
-  position:absolute;
-  width:0;
-  height:0;
-  border-left:16px solid transparent;
-  border-right:16px solid transparent;
-  border-bottom:30px solid #e3c72f;
-  z-index:4;
-}
-.serpentine .flower-cluster{
-  position:absolute;
-  color:#d9a19a;
-  font-size:22px;
-  letter-spacing:-4px;
-  z-index:4;
-  transform:rotate(-18deg);
-}
-@media(max-width:900px){
-  .serpentine{grid-column:span 1; transform:scale(.82); transform-origin:top center; margin-bottom:-210px;}
+  color:#5a3c28;
+  line-height:1.7;
 }
 
 @media print{
-  .toolbar,.status,.client-note,.tag-guide{display:none}
+  .toolbar,.status,.client-note,.tag-guide,.choice-note{display:none}
   header{padding-bottom:12px}
   .chart-wrap{width:100%;margin:10px 0;border:1px dashed #ccc}
   body{background:white}
 }
 
-/* Strong Cinzel override */
 body,
 body *,
 button,
@@ -413,20 +322,24 @@ textarea,
 <body>
 <header>
   <h1>Vintage Acres Seating Planner</h1>
-  <p>Click directly into each table number, guest name, or tag line to type.</p>
+  <p>Round tables, harvest table, and sweetheart table options.</p>
   <div class="status" id="status">Auto-save is on for this browser.</div>
 </header>
 
 <div class="toolbar">
-  <button onclick="addRoundTable()">Add Round Table</button>
+  <button onclick="addRoundTable()">Add 8-Seat Round Table</button>
   <button onclick="addSweetheart(2)">Add Sweetheart Table of 2</button>
   <button onclick="addSweetheart(4)">Add Sweetheart Table of 4</button>
   <button onclick="addHarvest()">Add Harvest Table of 14</button>
-  <button onclick="addSerpentine()">Add Serpentine Setup</button>
+  <a class="link-button secondary" href="serpentine.html" target="_blank">Open Serpentine Setup Instead</a>
   <button onclick="removeLastTable()">Remove Last Table</button>
   <button onclick="downloadCopy()">Download Filled Copy</button>
   <button onclick="window.print()">Print / Save as PDF</button>
   <button onclick="clearGuestNames()">Clear Guest Names</button>
+</div>
+
+<div class="choice-note">
+  <strong>Changing your mind?</strong> If you prefer the serpentine-style layout instead, open the separate serpentine setup page using the button above.
 </div>
 
 <main id="chart" class="chart-wrap"></main>
@@ -451,7 +364,7 @@ let tableCounter = 0;
 const chart = document.getElementById("chart");
 const status = document.getElementById("status");
 const guestCount = document.getElementById("guestCount");
-const storageKey = "vintageAcresSeatingPlannerCinzelTagsV1";
+const storageKey = "vintageAcresStandardSeatingPlannerV1";
 
 function wireEditable(el){
   el.addEventListener("input", function(){
@@ -579,89 +492,6 @@ function addHarvest(skipSave=false){
 
   positions.forEach((pos, idx) => {
     unit.appendChild(createSeat("Guest " + (idx + 1), "seat hseat " + pos));
-  });
-
-  chart.appendChild(unit);
-  updateGuestCount();
-  if(!skipSave) saveState();
-}
-
-
-function addSerpentine(skipSave=false){
-  tableCounter++;
-  const unit = document.createElement("section");
-  unit.className = "table-unit serpentine";
-  unit.dataset.type = "serpentine";
-
-  const label = createEditableText("Serpentine", "serp-floor-label");
-  unit.appendChild(label);
-
-  const garland = document.createElement("div");
-  garland.className = "serp-garland";
-  garland.innerHTML = `
-    <div class="serp-vine">
-      <svg viewBox="0 0 292 1040" aria-hidden="true">
-        <path d="M118 0 C 285 105, 280 205, 145 270 C 10 335, 5 455, 148 520 C 292 585, 285 710, 145 785 C 25 850, 20 960, 170 1040" fill="none" stroke="#8fa77c" stroke-width="17" stroke-linecap="round" opacity="0.68"/>
-        <path d="M118 0 C 285 105, 280 205, 145 270 C 10 335, 5 455, 148 520 C 292 585, 285 710, 145 785 C 25 850, 20 960, 170 1040" fill="none" stroke="#6f8b5d" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
-        ${Array.from({length:44}).map((_,i)=>{
-          const y = i*24 + 12;
-          const side = i%2===0 ? -1 : 1;
-          const x = 145 + Math.sin(i/3)*92;
-          const lx = x + side*22;
-          return `<ellipse cx="${lx}" cy="${y}" rx="13" ry="5" fill="#8fa77c" opacity="0.9" transform="rotate(${side*34} ${lx} ${y})"/>`;
-        }).join("")}
-      </svg>
-    </div>`;
-  unit.appendChild(garland);
-
-  const decor = [
-    [125,116,"flower-cluster","✿✿✿"],[212,178,"serp-dot",""],[248,142,"serp-triangle",""],
-    [302,322,"flower-cluster","✿✿✿"],[235,392,"serp-dot",""],[276,360,"serp-triangle",""],
-    [118,492,"flower-cluster","✿✿✿"],[200,574,"serp-dot",""],[150,548,"serp-triangle",""],
-    [306,686,"flower-cluster","✿✿✿"],[262,748,"serp-dot",""],[310,734,"serp-triangle",""],
-    [120,858,"flower-cluster","✿✿✿"],[198,936,"serp-dot",""],[148,922,"serp-triangle",""]
-  ];
-  decor.forEach(d => {
-    const el = document.createElement("div");
-    el.className = d[2];
-    el.textContent = d[3];
-    el.style.left = d[0] + "px";
-    el.style.top = d[1] + "px";
-    unit.appendChild(el);
-  });
-
-  const tables = [
-    {x:120, y:70},
-    {x:282, y:245},
-    {x:116, y:420},
-    {x:282, y:595},
-    {x:116, y:770},
-    {x:282, y:945}
-  ];
-
-  const seatPositions = [
-    [50,-50],[118,-42],[178,16],[190,92],
-    [118,164],[50,170],[-50,92],[-42,16]
-  ];
-
-  tables.forEach((t, index) => {
-    const table = document.createElement("div");
-    table.className = "serp-table";
-    table.style.left = t.x + "px";
-    table.style.top = t.y + "px";
-    unit.appendChild(table);
-
-    const name = createEditableText("Table " + (index + 1), "serp-name");
-    name.style.left = (t.x + 27) + "px";
-    name.style.top = (t.y + 64) + "px";
-    unit.appendChild(name);
-
-    seatPositions.forEach((p, sIndex) => {
-      const seat = createSeat("Guest " + (sIndex + 1), "seat");
-      seat.style.left = (t.x + p[0]) + "px";
-      seat.style.top = (t.y + p[1]) + "px";
-      unit.appendChild(seat);
-    });
   });
 
   chart.appendChild(unit);
