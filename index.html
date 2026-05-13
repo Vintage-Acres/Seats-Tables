@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vintage Acres Seating Planner</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --cream:#efe6d7;
+  --paper:#fffdf8;
+  --brown:#6b4a33;
+  --sage:#9aad86;
+  --sage-dark:#81966e;
+  --outline:#d2bfa7;
+  --wood:#e8d7bd;
+  --wood-edge:#b89a78;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Cinzel', Georgia, serif;
+  background:#fbf7f0;
+  color:#2d1c12;
+}
+header{
+  background:var(--cream);
+  text-align:center;
+  padding:18px 18px 24px;
+  border-bottom:1px solid #d7c5ae;
+}
+h1{
+  margin:0 0 8px;
+  color:var(--brown);
+  font-size:42px;
+  line-height:1;
+  font-weight:700;
+}
+header p{
+  margin:0;
+  font-size:18px;
+}
+.status{
+  text-align:center;
+  font-size:13px;
+  color:#6b4a33;
+  margin:10px 0 0;
+}
+.toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+  padding:18px 12px;
+  background:#fbf7f0;
+  border-bottom:1px solid #eee2d1;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+button,
+.link-button{
+  border:0;
+  border-radius:28px;
+  background:var(--sage);
+  color:white;
+  padding:12px 18px;
+  font:700 15px 'Cinzel', Georgia, serif;
+  box-shadow:0 5px 12px rgba(0,0,0,.16);
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-block;
+}
+button:hover,
+.link-button:hover{background:var(--sage-dark)}
+.link-button.secondary{background:var(--brown)}
+.chart-wrap{
+  width:94%;
+  min-height:680px;
+  margin:30px auto;
+  padding:42px 30px;
+  border:2px dashed var(--outline);
+  border-radius:34px;
+  background:var(--paper);
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(360px,1fr));
+  gap:58px 72px;
+  align-items:start;
+  justify-items:center;
+}
+.table-unit{
+  position:relative;
+  width:360px;
+  height:350px;
+  user-select:none;
+}
+.round-table{
+  position:absolute;
+  left:100px;
+  top:90px;
+  width:160px;
+  height:160px;
+  border-radius:50%;
+  background:var(--wood);
+  border:4px solid var(--wood-edge);
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+.table-name{
+  position:absolute;
+  left:128px;
+  top:150px;
+  width:104px;
+  min-height:44px;
+  padding:8px 6px;
+  border-radius:14px;
+  background:#fffaf0;
+  color:var(--brown);
+  font-size:24px;
+  font-weight:700;
+  text-align:center;
+  outline:none;
+  z-index:2;
+}
+.seat{
+  position:absolute;
+  min-width:124px;
+  height:56px;
+  border:6px solid var(--sage);
+  border-radius:28px;
+  background:#f8fbf4;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:4px 10px;
+  text-align:center;
+  outline:none;
+  box-shadow:0 5px 13px rgba(0,0,0,.13);
+  overflow:hidden;
+}
+.seat-name{
+  width:100%;
+  outline:none;
+  line-height:1.05;
+  font-size:13px;
+  font-weight:600;
+  color:#2d1c12;
+}
+.seat-tags{
+  width:100%;
+  min-height:13px;
+  outline:none;
+  line-height:1.05;
+  font-size:10px;
+  font-weight:400;
+  color:#6b4a33;
+  margin-top:2px;
+}
+.seat-name:focus,
+.seat-tags:focus,
+.table-name:focus{
+  background:#fff7e8;
+  border-radius:8px;
+}
+.s1{left:118px;top:0}
+.s2{left:228px;top:58px}
+.s3{left:228px;top:146px}
+.s4{left:188px;top:258px}
+.s5{left:118px;top:298px}
+.s6{left:50px;top:258px}
+.s7{left:10px;top:146px}
+.s8{left:10px;top:58px}
+
+.sweetheart{width:330px;height:245px}
+.sweetheart .heart-table{
+  position:absolute;
+  left:55px;
+  top:84px;
+  width:220px;
+  height:78px;
+  border-radius:40px;
+  background:var(--wood);
+  border:4px solid var(--wood-edge);
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+.sweetheart .table-name{
+  left:92px;
+  top:100px;
+  width:146px;
+  font-size:20px;
+}
+.sweetheart .st1{left:42px;top:20px}
+.sweetheart .st2{left:164px;top:20px}
+
+.sweetheart.four{
+  width:560px;
+  height:245px;
+}
+.sweetheart.four .heart-table{
+  left:46px;
+  top:92px;
+  width:220px;
+}
+.sweetheart.four .heart-table.second{left:294px}
+.sweetheart.four .table-name{
+  left:70px;
+  top:108px;
+  width:170px;
+  font-size:20px;
+}
+.sweetheart.four .table-name.second-name{left:318px}
+.sweetheart.four .st1{left:42px;top:20px}
+.sweetheart.four .st2{left:164px;top:20px}
+.sweetheart.four .st3{left:290px;top:20px}
+.sweetheart.four .st4{left:412px;top:20px}
+
+.harvest{
+  width:560px;
+  height:330px;
+}
+.harvest-table{
+  position:absolute;
+  left:95px;
+  top:104px;
+  width:370px;
+  height:120px;
+  border-radius:22px;
+  background:var(--wood);
+  border:4px solid var(--wood-edge);
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+.harvest .table-name{
+  left:205px;
+  top:142px;
+  width:150px;
+  font-size:20px;
+}
+.hseat{
+  min-width:88px;
+  height:50px;
+  font-size:12px;
+}
+.htop1{left:92px;top:32px}
+.htop2{left:172px;top:32px}
+.htop3{left:252px;top:32px}
+.htop4{left:332px;top:32px}
+.htop5{left:412px;top:32px}
+.hbot1{left:92px;top:252px}
+.hbot2{left:172px;top:252px}
+.hbot3{left:252px;top:252px}
+.hbot4{left:332px;top:252px}
+.hbot5{left:412px;top:252px}
+.hend1{left:0;top:100px}
+.hend2{left:0;top:168px}
+.hend3{left:472px;top:100px}
+.hend4{left:472px;top:168px}
+
+.guest-count,
+.tag-guide,
+.client-note{
+  width:94%;
+  margin:0 auto 18px;
+  padding:18px 22px;
+  background:#efe6d7;
+  border-radius:18px;
+  color:#5a3c28;
+  font-size:16px;
+}
+.guest-count{
+  text-align:center;
+  font-size:22px;
+  font-weight:700;
+}
+.tag-guide{
+  background:#fffdf8;
+  border:1px dashed var(--outline);
+  text-align:center;
+  line-height:1.8;
+}
+.tag-guide strong{color:var(--brown)}
+
+.choice-note{
+  width:94%;
+  margin:22px auto 0;
+  padding:18px 22px;
+  background:#fffdf8;
+  border:1px dashed var(--outline);
+  border-radius:18px;
+  text-align:center;
+  color:#5a3c28;
+  line-height:1.7;
+}
+
+@media print{
+  .toolbar,.status,.client-note,.tag-guide,.choice-note{display:none}
+  header{padding-bottom:12px}
+  .chart-wrap{width:100%;margin:10px 0;border:1px dashed #ccc}
+  body{background:white}
+}
+
+body,
+body *,
+button,
+input,
+textarea,
+[contenteditable="true"],
+.seat-name,
+.seat-tags,
+.table-name,
+.guest-count,
+.tag-guide,
+.client-note {
+  font-family: 'Cinzel', Georgia, serif !important;
+}
+</style>
+</head>
+
+<body>
+<header>
+  <h1>Vintage Acres Seating Planner</h1>
+  <p>Round tables, harvest table, and sweetheart table options.</p>
+  <div class="status" id="status">Auto-save is on for this browser.</div>
+</header>
+
+<div class="toolbar">
+  <button onclick="addRoundTable()">Add 8-Seat Round Table</button>
+  <button onclick="addSweetheart(2)">Add Sweetheart Table of 2</button>
+  <button onclick="addSweetheart(4)">Add Sweetheart Table of 4</button>
+  <button onclick="addHarvest()">Add Harvest Table of 14</button>
+  <a class="link-button secondary" href="serpentine.html" target="_blank">Open Serpentine Setup Instead</a>
+  <button onclick="removeLastTable()">Remove Last Table</button>
+  <button onclick="downloadCopy()">Download Filled Copy</button>
+  <button onclick="window.print()">Print / Save as PDF</button>
+  <button onclick="clearGuestNames()">Clear Guest Names</button>
+</div>
+
+<div class="choice-note">
+  <strong>Changing your mind?</strong> If you prefer the serpentine-style layout instead, open the separate serpentine setup page using the button above.
+</div>
+
+<main id="chart" class="chart-wrap"></main>
+
+<div class="guest-count" id="guestCount">Total Guests Seated: 0</div>
+
+<div class="tag-guide">
+  <strong>Guest Tags:</strong>
+  HC = High Chair &nbsp; | &nbsp;
+  D.D. = Designated Driver &nbsp; | &nbsp;
+  GF = Gluten Free &nbsp; | &nbsp;
+  C. = Celiac &nbsp; | &nbsp;
+  Veg = Vegan
+</div>
+
+<div class="client-note">
+  <strong>For couples:</strong> Your work auto-saves on this device. When complete, use <strong>Download Filled Copy</strong> or <strong>Print / Save as PDF</strong> and send it back to Vintage Acres.
+</div>
+
+<script>
+let tableCounter = 0;
+const chart = document.getElementById("chart");
+const status = document.getElementById("status");
+const guestCount = document.getElementById("guestCount");
+const storageKey = "vintageAcresStandardSeatingPlannerV1";
+
+function wireEditable(el){
+  el.addEventListener("input", function(){
+    saveState();
+    updateGuestCount();
+  });
+}
+
+function createEditableText(text, className){
+  const div = document.createElement("div");
+  div.className = className;
+  div.contentEditable = "true";
+  div.spellcheck = false;
+  div.textContent = text;
+  wireEditable(div);
+  return div;
+}
+
+function createSeat(text, className){
+  const seat = document.createElement("div");
+  seat.className = className;
+
+  const name = createEditableText(text, "seat-name");
+  const tags = createEditableText("Tags", "seat-tags");
+
+  seat.appendChild(name);
+  seat.appendChild(tags);
+  return seat;
+}
+
+function normalizeSeat(seat){
+  if(seat.querySelector(".seat-name")) return;
+
+  const existing = seat.textContent.trim();
+  seat.textContent = "";
+
+  const name = createEditableText(existing || "Guest", "seat-name");
+  const tags = createEditableText("Tags", "seat-tags");
+
+  seat.appendChild(name);
+  seat.appendChild(tags);
+}
+
+function isFilledGuestSeat(seat){
+  const nameEl = seat.querySelector(".seat-name");
+  if(!nameEl) return false;
+  const text = nameEl.textContent.trim().toLowerCase();
+  return text !== "" && !/^guest\s*\d*$/.test(text);
+}
+
+function updateGuestCount(){
+  let count = 0;
+  document.querySelectorAll(".seat").forEach(seat => {
+    normalizeSeat(seat);
+    if(isFilledGuestSeat(seat)) count++;
+  });
+  guestCount.textContent = "Total Guests Seated: " + count;
+}
+
+function addRoundTable(skipSave=false){
+  tableCounter++;
+  const unit = document.createElement("section");
+  unit.className = "table-unit";
+  unit.dataset.type = "round";
+
+  const table = document.createElement("div");
+  table.className = "round-table";
+  unit.appendChild(table);
+
+  unit.appendChild(createEditableText("Table " + tableCounter, "table-name"));
+
+  for(let i=1;i<=8;i++){
+    unit.appendChild(createSeat("Guest " + i, "seat s" + i));
+  }
+
+  chart.appendChild(unit);
+  updateGuestCount();
+  if(!skipSave) saveState();
+}
+
+function addSweetheart(count, skipSave=false){
+  tableCounter++;
+  const unit = document.createElement("section");
+  unit.className = count === 4 ? "table-unit sweetheart four" : "table-unit sweetheart";
+  unit.dataset.type = "sweetheart" + count;
+
+  const table = document.createElement("div");
+  table.className = "heart-table";
+  unit.appendChild(table);
+  unit.appendChild(createEditableText("Sweetheart", "table-name"));
+
+  if(count === 4){
+    const table2 = document.createElement("div");
+    table2.className = "heart-table second";
+    unit.appendChild(table2);
+    unit.appendChild(createEditableText("Sweetheart", "table-name second-name"));
+  }
+
+  for(let i=1;i<=count;i++){
+    unit.appendChild(createSeat("Guest " + i, "seat st" + i));
+  }
+
+  chart.appendChild(unit);
+  updateGuestCount();
+  if(!skipSave) saveState();
+}
+
+function addHarvest(skipSave=false){
+  tableCounter++;
+  const unit = document.createElement("section");
+  unit.className = "table-unit harvest";
+  unit.dataset.type = "harvest";
+
+  const table = document.createElement("div");
+  table.className = "harvest-table";
+  unit.appendChild(table);
+  unit.appendChild(createEditableText("Harvest " + tableCounter, "table-name"));
+
+  const positions = [
+    "htop1","htop2","htop3","htop4","htop5",
+    "hend3","hend4",
+    "hbot5","hbot4","hbot3","hbot2","hbot1",
+    "hend2","hend1"
+  ];
+
+  positions.forEach((pos, idx) => {
+    unit.appendChild(createSeat("Guest " + (idx + 1), "seat hseat " + pos));
+  });
+
+  chart.appendChild(unit);
+  updateGuestCount();
+  if(!skipSave) saveState();
+}
+
+function removeLastTable(){
+  if(chart.lastElementChild){
+    chart.removeChild(chart.lastElementChild);
+    saveState();
+    updateGuestCount();
+  }
+}
+
+function clearGuestNames(){
+  if(confirm("Clear guest names and tags?")){
+    document.querySelectorAll(".seat").forEach(seat => {
+      normalizeSeat(seat);
+      seat.querySelector(".seat-name").textContent = "";
+      seat.querySelector(".seat-tags").textContent = "";
+    });
+    saveState();
+    updateGuestCount();
+  }
+}
+
+function saveState(){
+  localStorage.setItem(storageKey, chart.innerHTML);
+  status.textContent = "Saved.";
+  setTimeout(() => status.textContent = "Auto-save is on for this browser.", 1000);
+}
+
+function loadState(){
+  const saved = localStorage.getItem(storageKey);
+
+  if(saved){
+    chart.innerHTML = saved;
+    chart.querySelectorAll(".seat").forEach(normalizeSeat);
+    chart.querySelectorAll("[contenteditable='true']").forEach(wireEditable);
+    tableCounter = chart.children.length;
+  } else {
+    for(let i=0;i<6;i++) addRoundTable(true);
+    saveState();
+  }
+
+  updateGuestCount();
+}
+
+function downloadCopy(){
+  saveState();
+  updateGuestCount();
+
+  const clone = document.documentElement.cloneNode(true);
+  const blob = new Blob(["<!DOCTYPE html>\n" + clone.outerHTML], {type:"text/html"});
+  const a = document.createElement("a");
+
+  a.href = URL.createObjectURL(blob);
+  a.download = "Vintage-Acres-Filled-Seating-Plan.html";
+  a.click();
+
+  URL.revokeObjectURL(a.href);
+}
+
+loadState();
+</script>
+</body>
+</html>
