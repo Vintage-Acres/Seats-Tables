@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vintage Acres Serpentine Seating Planner</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --cream:#efe6d7;
+  --paper:#fffdf8;
+  --brown:#6b4a33;
+  --sage:#9aad86;
+  --sage-dark:#81966e;
+  --outline:#d2bfa7;
+  --blue:#6670ff;
+  --floor:#d9d8cf;
+  --wall:#b7b6ad;
+  --bar:#9a5729;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  background:#f7f3ec;
+  font-family:'Cinzel', Georgia, serif;
+  color:#2d1c12;
+}
+
+header{
+  background:var(--cream);
+  text-align:center;
+  padding:22px 18px;
+  border-bottom:1px solid #d8c7b0;
+}
+
+h1{
+  margin:0;
+  color:var(--brown);
+  font-size:38px;
+  line-height:1.05;
+}
+
+header p{
+  margin:10px 0 0;
+  font-size:16px;
+}
+
+.toolbar{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  padding:16px;
+  background:#fffaf5;
+  border-bottom:1px solid #e6d9c7;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+button,
+.link-button{
+  border:0;
+  border-radius:28px;
+  padding:11px 16px;
+  background:var(--sage);
+  color:white;
+  font-family:'Cinzel', Georgia, serif;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,.12);
+  text-decoration:none;
+  display:inline-block;
+}
+
+button:hover,
+.link-button:hover{background:var(--sage-dark);}
+
+.link-button.secondary{background:var(--brown);}
+
+.status{
+  text-align:center;
+  padding:10px;
+  color:#6b4a33;
+  font-size:13px;
+}
+
+.stage-wrap{
+  width:96%;
+  max-width:1280px;
+  margin:24px auto;
+  background:white;
+  border:2px dashed var(--outline);
+  border-radius:30px;
+  padding:22px;
+  overflow:auto;
+}
+
+.floor-stage{
+  position:relative;
+  width:1250px;
+  height:1056px;
+  margin:auto;
+  background:#fff;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 4px 18px rgba(0,0,0,.08);
+}
+
+.upper-room{
+  position:absolute;
+  left:355px;
+  top:68px;
+  width:848px;
+  height:632px;
+  background:var(--floor);
+  border:5px solid var(--wall);
+}
+
+.lower-room{
+  position:absolute;
+  left:45px;
+  top:695px;
+  width:1158px;
+  height:360px;
+  background:var(--floor);
+  border:5px solid var(--wall);
+}
+
+.notch-fill{
+  position:absolute;
+  left:350px;
+  top:300px;
+  width:342px;
+  height:392px;
+  background:var(--floor);
+  border-left:5px solid var(--wall);
+  border-bottom:5px solid var(--wall);
+}
+
+.upper-room::after,
+.lower-room::after,
+.notch-fill::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,.22), transparent 18%),
+    radial-gradient(circle at 70% 45%, rgba(255,255,255,.15), transparent 24%),
+    radial-gradient(circle at 40% 80%, rgba(130,130,120,.08), transparent 22%);
+  pointer-events:none;
+}
+
+.bar-shape{
+  position:absolute;
+  left:420px;
+  top:372px;
+  width:250px;
+  height:50px;
+  background:var(--bar);
+  z-index:3;
+}
+
+.bar-shape::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:50px;
+  height:245px;
+  background:var(--bar);
+}
+
+.bar-text{
+  position:absolute;
+  left:508px;
+  top:365px;
+  font-size:43px;
+  color:#1e120a;
+  z-index:4;
+}
+
+.plan-title{
+  position:absolute;
+  left:420px;
+  top:125px;
+  width:260px;
+  text-align:center;
+  color:#2b1b10;
+  z-index:4;
+}
+
+.plan-title div:first-child{font-size:32px;}
+.plan-title div:last-child{font-size:26px;}
+
+.table-group{
+  position:absolute;
+  width:188px;
+  height:188px;
+  z-index:20;
+}
+
+.table-circle{
+  position:absolute;
+  left:49px;
+  top:49px;
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:#fff;
+  border:4px solid var(--blue);
+  z-index:2;
+}
+
+.table-label{
+  position:absolute;
+  left:62px;
+  top:76px;
+  width:64px;
+  min-height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#2d1c12;
+  font-size:12px;
+  font-weight:800;
+  line-height:1.15;
+  z-index:4;
+  pointer-events:none;
+}
+
+.seat{
+  position:absolute;
+  width:34px;
+  height:34px;
+  border:3px solid var(--blue);
+  border-radius:7px;
+  background:#fff;
+  z-index:5;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#5961e8;
+  font-size:0;
+  font-weight:800;
+  box-shadow:0 2px 6px rgba(0,0,0,.10);
+}
+
+.seat::after{
+  content:"";
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#9ca2ff;
+}
+
+.seat.filled{
+  background:var(--sage);
+  border-color:var(--sage-dark);
+  color:white;
+  font-size:9px;
+  line-height:1;
+}
+
+.seat.filled::after{display:none;}
+
+.seat:hover{
+  transform:scale(1.12);
+  box-shadow:0 4px 12px rgba(0,0,0,.18);
+}
+
+.editor-bubble{
+  position:absolute;
+  width:275px;
+  background:#fffdf8;
+  border:2px solid #d2bfa7;
+  border-radius:22px;
+  box-shadow:0 16px 36px rgba(0,0,0,.22);
+  padding:16px;
+  z-index:999;
+  display:none;
+}
+
+.editor-bubble.active{display:block;}
+
+.editor-bubble h2{
+  margin:0 0 10px;
+  color:#6b4a33;
+  font-size:18px;
+  line-height:1.1;
+}
+
+.editor-bubble label{
+  display:block;
+  font-size:11px;
+  font-weight:800;
+  color:#6b4a33;
+  margin:10px 0 5px;
+}
+
+.editor-bubble input{
+  width:100%;
+  border:1px solid #d9c8b0;
+  border-radius:14px;
+  padding:10px 12px;
+  font-family:'Cinzel', Georgia, serif;
+  font-size:14px;
+  outline:none;
+  background:white;
+}
+
+.editor-actions{
+  display:flex;
+  gap:8px;
+  margin-top:13px;
+}
+
+.editor-actions button{
+  flex:1;
+  box-shadow:none;
+  font-size:11px;
+  padding:10px;
+}
+
+.editor-actions .clear-btn{background:#b89a78;}
+
+.guest-count{
+  width:94%;
+  max-width:1280px;
+  margin:0 auto 18px;
+  background:#efe6d7;
+  border-radius:18px;
+  padding:16px;
+  text-align:center;
+  font-size:22px;
+  font-weight:700;
+  color:#5b3b27;
+}
+
+.note{
+  width:94%;
+  max-width:1280px;
+  margin:0 auto 28px;
+  background:#fffdf8;
+  border:1px dashed #c9b39a;
+  border-radius:18px;
+  padding:18px;
+  text-align:center;
+  line-height:1.7;
+  color:#5b3b27;
+}
+
+@media(max-width:900px){.stage-wrap{overflow-x:auto;}}
+
+@media print{
+  .toolbar,.status,.note,.editor-bubble{display:none!important;}
+  body{background:white;}
+  .stage-wrap{border:none;margin:0;padding:0;width:100%;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Vintage Acres Serpentine Seating Planner</h1>
+  <p>Click any chair to assign a guest name. Table 1 and Table 7 have 6 seats; Tables 2–6 have 4 seats.</p>
+</header>
+
+<div class="toolbar">
+  <a class="link-button secondary" href="index.html">Back to Round / Harvest Setup</a>
+  <button onclick="window.print()">Print / Save PDF</button>
+  <button onclick="downloadCopy()">Download Filled Copy</button>
+  <button onclick="clearAllGuests()">Clear Guest Names</button>
+</div>
+
+<div class="status" id="status">Auto-save enabled for this browser.</div>
+
+<div class="stage-wrap">
+  <div class="floor-stage" id="floorStage">
+    <div class="upper-room"></div>
+    <div class="lower-room"></div>
+    <div class="notch-fill"></div>
+    <div class="bar-shape"></div>
+    <div class="bar-text">BAR</div>
+    <div class="plan-title"><div>SERPENTINE</div><div>32 SEATS</div></div>
+
+    <div class="editor-bubble" id="editorBubble">
+      <h2 id="bubbleTitle">Seat</h2>
+      <label for="guestNameInput">Guest Name</label>
+      <input id="guestNameInput" type="text" placeholder="Type guest name here" />
+      <label for="guestTagInput">Notes / Meal Tags</label>
+      <input id="guestTagInput" type="text" placeholder="GF, Vegan, DD, High Chair, etc." />
+      <div class="editor-actions">
+        <button onclick="saveBubble()">Save</button>
+        <button class="clear-btn" onclick="clearCurrentSeat()">Clear</button>
+        <button class="clear-btn" onclick="closeBubble()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="guest-count" id="guestCount">Total Guests Seated: 0 of 32</div>
+
+<div class="note">
+  Click a chair, enter the guest name and any meal/accessibility notes, then save. Completed seats turn sage.
+</div>
+
+<script>
+const floorStage = document.getElementById('floorStage');
+const statusBox = document.getElementById('status');
+const guestCount = document.getElementById('guestCount');
+const bubble = document.getElementById('editorBubble');
+const bubbleTitle = document.getElementById('bubbleTitle');
+const guestNameInput = document.getElementById('guestNameInput');
+const guestTagInput = document.getElementById('guestTagInput');
+const storageKey = 'vintageAcresSerpentine32SeatPlannerV1';
+const totalSeats = 32;
+
+let activeSeatId = null;
+let seatingData = {};
+
+const tables = [
+  {id:1, x:560, y:655, seats:6, side:'right'},
+  {id:2, x:560, y:485, seats:4, side:'left'},
+  {id:3, x:740, y:390, seats:4, side:'left'},
+  {id:4, x:915, y:400, seats:4, side:'right'},
+  {id:5, x:770, y:235, seats:4, side:'left'},
+  {id:6, x:980, y:240, seats:4, side:'right'},
+  {id:7, x:1065, y:70, seats:6, side:'right'}
+];
+
+const positions4Right = [
+  {x:142, y:38},
+  {x:142, y:77},
+  {x:142, y:116},
+  {x:12, y:77}
+];
+
+const positions4Left = [
+  {x:12, y:38},
+  {x:12, y:77},
+  {x:12, y:116},
+  {x:142, y:77}
+];
+
+const positions6Right = [
+  {x:128, y:4},
+  {x:158, y:36},
+  {x:158, y:77},
+  {x:158, y:118},
+  {x:128, y:150},
+  {x:12, y:77}
+];
+
+const positions6Left = [
+  {x:26, y:4},
+  {x:-4, y:36},
+  {x:-4, y:77},
+  {x:-4, y:118},
+  {x:26, y:150},
+  {x:142, y:77}
+];
+
+function getSeatPositions(table){
+  if(table.seats === 6){
+    return table.side === 'left' ? positions6Left : positions6Right;
+  }
+  return table.side === 'left' ? positions4Left : positions4Right;
+}
+
+function initials(name){
+  const clean = name.trim();
+  if(!clean) return '';
+  return clean.split(' ').filter(Boolean).slice(0,2).map(part => part.charAt(0).toUpperCase()).join('');
+}
+
+function buildPlanner(){
+  tables.forEach(table => {
+    const group = document.createElement('div');
+    group.className = 'table-group';
+    group.style.left = table.x + 'px';
+    group.style.top = table.y + 'px';
+    floorStage.appendChild(group);
+
+    const circle = document.createElement('div');
+    circle.className = 'table-circle';
+    group.appendChild(circle);
+
+    const label = document.createElement('div');
+    label.className = 'table-label';
+    label.innerHTML = 'Table<br>' + table.id;
+    group.appendChild(label);
+
+    const seatPositions = getSeatPositions(table);
+
+    seatPositions.forEach((pos, index) => {
+      const seatId = 't' + table.id + 's' + (index + 1);
+      const seat = document.createElement('button');
+      seat.type = 'button';
+      seat.className = 'seat';
+      seat.id = seatId;
+      seat.dataset.table = table.id;
+      seat.dataset.seat = index + 1;
+      seat.style.left = pos.x + 'px';
+      seat.style.top = pos.y + 'px';
+      seat.addEventListener('click', () => openBubble(seatId));
+      group.appendChild(seat);
+    });
+  });
+
+  refreshSeats();
+}
+
+function refreshSeats(){
+  document.querySelectorAll('.seat').forEach(seat => {
+    const data = seatingData[seat.id] || {};
+    const name = data.name || '';
+    const tag = data.tag || '';
+    seat.classList.toggle('filled', !!name.trim());
+    seat.textContent = name.trim() ? initials(name) : '';
+    seat.title = name.trim() ? name + (tag ? ' — ' + tag : '') : 'Open seat';
+  });
+  updateGuestCount();
+}
+
+function openBubble(seatId){
+  activeSeatId = seatId;
+  const seat = document.getElementById(seatId);
+  const group = seat.closest('.table-group');
+  const data = seatingData[seatId] || {};
+
+  bubbleTitle.textContent = 'Table ' + seat.dataset.table + ' — Seat ' + seat.dataset.seat;
+  guestNameInput.value = data.name || '';
+  guestTagInput.value = data.tag || '';
+
+  const seatX = parseInt(group.style.left, 10) + parseInt(seat.style.left, 10);
+  const seatY = parseInt(group.style.top, 10) + parseInt(seat.style.top, 10);
+
+  let bubbleX = seatX + 48;
+  let bubbleY = seatY - 70;
+
+  if(bubbleX > 940) bubbleX = seatX - 290;
+  if(bubbleY < 10) bubbleY = 10;
+  if(bubbleY > 840) bubbleY = 840;
+
+  bubble.style.left = bubbleX + 'px';
+  bubble.style.top = bubbleY + 'px';
+  bubble.classList.add('active');
+  setTimeout(() => guestNameInput.focus(), 40);
+}
+
+function saveBubble(){
+  if(!activeSeatId) return;
+  seatingData[activeSeatId] = {
+    name: guestNameInput.value.trim(),
+    tag: guestTagInput.value.trim()
+  };
+  saveState();
+  refreshSeats();
+  closeBubble();
+}
+
+function clearCurrentSeat(){
+  if(!activeSeatId) return;
+  delete seatingData[activeSeatId];
+  saveState();
+  refreshSeats();
+  closeBubble();
+}
+
+function closeBubble(){
+  bubble.classList.remove('active');
+  activeSeatId = null;
+}
+
+function clearAllGuests(){
+  if(confirm('Clear all guest names and notes?')){
+    Object.keys(seatingData).forEach(key => {
+      if(key.startsWith('t') && key.includes('s')) delete seatingData[key];
+    });
+    saveState();
+    refreshSeats();
+  }
+}
+
+function updateGuestCount(){
+  let count = 0;
+  Object.keys(seatingData).forEach(key => {
+    if(key.startsWith('t') && key.includes('s') && seatingData[key]?.name) count++;
+  });
+  guestCount.textContent = 'Total Guests Seated: ' + count + ' of ' + totalSeats;
+}
+
+function saveState(){
+  localStorage.setItem(storageKey, JSON.stringify(seatingData));
+  statusBox.textContent = 'Saved';
+  setTimeout(() => statusBox.textContent = 'Auto-save enabled for this browser.', 1000);
+}
+
+function loadState(){
+  try{
+    seatingData = JSON.parse(localStorage.getItem(storageKey)) || {};
+  } catch(e){
+    seatingData = {};
+  }
+  buildPlanner();
+  updateGuestCount();
+}
+
+function downloadCopy(){
+  saveBubble();
+  const clone = document.documentElement.cloneNode(true);
+  const html = '<!DOCTYPE html>' + String.fromCharCode(10) + clone.outerHTML;
+  const blob = new Blob([html], {type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Vintage-Acres-Serpentine-Seating-Plan.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+document.addEventListener('keydown', event => {
+  if(event.key === 'Escape') closeBubble();
+  if(event.key === 'Enter' && bubble.classList.contains('active')) saveBubble();
+});
+
+loadState();
+</script>
+</body>
+</html>
