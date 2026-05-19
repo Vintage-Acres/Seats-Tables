@@ -64,7 +64,8 @@ header p{
   z-index:100;
 }
 
-button{
+button,
+.link-button{
   border:0;
   border-radius:28px;
   padding:11px 16px;
@@ -75,9 +76,14 @@ button{
   font-weight:700;
   cursor:pointer;
   box-shadow:0 4px 10px rgba(0,0,0,.12);
+  text-decoration:none;
+  display:inline-block;
 }
 
-button:hover{background:var(--sage-dark);}
+button:hover,
+.link-button:hover{background:var(--sage-dark);}
+
+.link-button.secondary{background:var(--brown);}
 
 .status{
   text-align:center;
@@ -370,6 +376,7 @@ button:hover{background:var(--sage-dark);}
 </header>
 
 <div class="toolbar">
+  <a class="link-button secondary" href="index.html">Back to Round / Harvest Setup</a>
   <button onclick="window.print()">Print / Save PDF</button>
   <button onclick="downloadCopy()">Download Filled Copy</button>
   <button onclick="clearAllGuests()">Clear Guest Names</button>
@@ -431,7 +438,6 @@ const tables = [
   {id:7, x:1065, y:70, seats:6, side:'right'}
 ];
 
-/* Tables 2–6: 3 chairs on one side, 1 chair opposite. */
 const positions4Right = [
   {x:142, y:38},
   {x:142, y:77},
@@ -446,7 +452,6 @@ const positions4Left = [
   {x:142, y:77}
 ];
 
-/* Tables 1 and 7: 5 chairs on one side, 1 chair opposite. */
 const positions6Right = [
   {x:128, y:4},
   {x:158, y:36},
