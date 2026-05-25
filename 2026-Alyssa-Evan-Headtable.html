@@ -97,6 +97,39 @@ button:hover,
   width:360px;
   height:350px;
   user-select:none;
+  justify-self:center;
+  max-width:100%;
+}
+
+/* Keeps large table layouts from overlapping the next grid item.
+   Wide table types reserve enough grid space before the next table is placed. */
+.table-unit.head8,
+.table-unit.harvest,
+.table-unit.sweetheart.four{
+  grid-column:span 2;
+}
+
+@media (max-width:950px){
+  .table-unit.head8,
+  .table-unit.harvest,
+  .table-unit.sweetheart.four{
+    grid-column:1 / -1;
+    transform:scale(.9);
+    transform-origin:top center;
+    margin-bottom:-20px;
+  }
+}
+
+@media (max-width:760px){
+  .table-unit.head8{
+    transform:scale(.72);
+    margin-bottom:-65px;
+  }
+  .table-unit.harvest,
+  .table-unit.sweetheart.four{
+    transform:scale(.78);
+    margin-bottom:-50px;
+  }
 }
 .round-table{
   position:absolute;
